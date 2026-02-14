@@ -149,6 +149,22 @@ body {
     margin: 0;
 }
 
+.footer {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+}
+
+.signature {
+    font-size: 1rem;
+    color: #555;
+    font-style: normal;
+    margin: 0;
+    font-family: 'Dancing Script', cursive;
+}
+
 /* The Heart Seal */
 .heart {
     position: absolute;
