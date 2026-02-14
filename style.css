@@ -1,0 +1,295 @@
+:root {
+    --primary: #ff0033;
+    --secondary: #ff85a2;
+    --bg-color: #ffe6eb;
+    --envelope-color: #ff5e78;
+    --envelope-flap-color: #ff4766;
+    --heart-color: #ff0033;
+    --text-color: #555;
+    --paper-color: #fff0f5;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #fff0f3, #ffd1dc);
+    font-family: 'Pacifico', cursive;
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    display: flex;
+    /* Helps centering envelope */
+    justify-content: center;
+    align-items: center;
+    /* Move down slightly to account for letter opening upwards */
+    transform: translateY(50px);
+    transition: transform 0.6s ease;
+}
+
+.container.open {
+    /* When open, shift everything down a bit more to keep the visual center balanced */
+    transform: translateY(100px);
+}
+
+/* The Envelope Wrapper */
+.envelope-wrapper {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background: var(--envelope-color);
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+/* Top Flap (Triangle pointing down) */
+.envelope-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 130px solid var(--envelope-flap-color);
+    z-index: 5;
+    transform-origin: top;
+    transition: transform 0.5s ease-in-out 0.2s, z-index 0.2s 0.2s;
+    /* Delay z-index switch */
+}
+
+/* The Pocket (Left, Right, Bottom triangles) */
+/* We simulate this with a single pseudo-element or separate divs? 
+   Let's use ::after for the complete pocket look to be cleaner.
+   Actually, one pseudo-element can't do the complex 3-sided pocket perfect with different shades easily.
+   Let's just use borders on ::after like before but cleaner.
+*/
+.envelope-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    /* These borders create the pocket shape */
+    border-left: 150px solid var(--secondary);
+    /* Lighter pink side */
+    border-right: 150px solid var(--secondary);
+    border-bottom: 110px solid var(--envelope-color);
+    /* Bottom matches or slightly darker */
+    border-top: 90px solid transparent;
+    /* Allows letter to peek from behind */
+    z-index: 4;
+    border-radius: 0 0 10px 10px;
+    pointer-events: none;
+    /* Let box clicks pass through */
+}
+
+/* The Letter */
+.letter {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: 90%;
+    background: var(--paper-color);
+    border-radius: 5px;
+    z-index: 3;
+    /* Behind pocket */
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), z-index 0.2s;
+    /* Bouncy effect */
+    padding: 20px 15px;
+    box-sizing: border-box;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Important: Start text from top */
+    justify-content: flex-start;
+    text-align: center;
+    overflow-y: auto;
+    /* Scroll if text is long */
+    scrollbar-width: none;
+}
+
+.letter::-webkit-scrollbar {
+    display: none;
+}
+
+/* Letter text styling */
+.text {
+    font-family: 'Dancing Script', cursive;
+    color: var(--text-color);
+    width: 100%;
+}
+
+.text strong {
+    font-size: 1.4rem;
+    color: var(--primary);
+    display: block;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    border-bottom: 2px dotted #ffd1dc;
+    padding-bottom: 5px;
+}
+
+.text p {
+    font-size: 1.05rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* The Heart Seal */
+.heart {
+    position: absolute;
+    /* Exact placement at the tip of the 130px flap */
+    top: 110px;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 35px;
+    height: 35px;
+    background: var(--heart-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 6;
+    /* On top of flap */
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.3s ease;
+    animation: pulse 1.5s infinite;
+}
+
+.heart::before,
+.heart::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    border-radius: 50%;
+}
+
+.heart::before {
+    top: -50%;
+    left: 0;
+}
+
+.heart::after {
+    left: -50%;
+    top: 0;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) rotate(45deg) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) rotate(45deg) scale(1.1);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(45deg) scale(1);
+    }
+}
+
+/* OPEN STATE */
+.container.open .envelope-wrapper::before {
+    /* Open flap */
+    transform: rotateX(180deg);
+    z-index: 1;
+    /* Go behind letter */
+    transition-delay: 0s;
+}
+
+.container.open .letter {
+    /* Slide letter UP */
+    transform: translateX(-50%) translateY(-120px);
+    z-index: 5;
+    /* Above pocket */
+    height: 280px;
+    /* Expand to read more easily */
+    transition-delay: 0.4s;
+}
+
+.container.open .heart {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Instruction Text */
+.instruction {
+    position: absolute;
+    bottom: -60px;
+    width: 100%;
+    text-align: center;
+    color: #777;
+    font-size: 1.1rem;
+    transition: opacity 0.5s;
+}
+
+.container.open .instruction {
+    opacity: 0;
+    /* Hide instruction when open */
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .container {
+        transform: scale(0.9) translateY(50px);
+    }
+
+    .container.open {
+        transform: scale(0.9) translateY(100px);
+    }
+}
+
+@media (max-width: 400px) {
+    .container {
+        transform: scale(0.8) translateY(50px);
+    }
+
+    .container.open {
+        transform: scale(0.8) translateY(120px);
+    }
+
+    .instruction {
+        font-size: 0.9rem;
+        bottom: -45px;
+        padding: 0 10px;
+    }
+}
+
+@media (max-width: 340px) {
+    .container {
+        transform: scale(0.7) translateY(50px);
+    }
+
+    .container.open {
+        transform: scale(0.7) translateY(140px);
+    }
+}
+
+/* Landscape Mode (Short screens) */
+@media (max-height: 500px) {
+    .container {
+        transform: scale(0.75) translateY(20px);
+    }
+
+    .container.open {
+        transform: scale(0.75) translateY(50px);
+    }
+
+    .instruction {
+        display: none;
+        /* Hide instruction on very short screens to save space */
+    }
+}
