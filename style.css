@@ -149,20 +149,15 @@ body {
     margin: 0;
 }
 
-.footer {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
-    text-align: center;
-    z-index: 10;
-}
-
+/* Signature Text inside Letter */
 .signature {
+    margin-top: 10px;
     font-size: 1rem;
-    color: #555;
-    font-style: normal;
-    margin: 0;
+    color: #333;
+    text-align: center;
     font-family: 'Dancing Script', cursive;
+    width: 100%;
+    display: block;
 }
 
 /* The Heart Seal */
@@ -260,21 +255,23 @@ body {
 /* Mobile Responsiveness */
 @media (max-width: 600px) {
     .container {
-        transform: scale(0.9) translateY(50px);
+        transform: scale(0.9) translateY(0px);
+        /* Centered vertically */
     }
 
     .container.open {
-        transform: scale(0.9) translateY(100px);
+        transform: scale(0.9) translateY(50px);
+        /* Moves down slightly when open */
     }
 }
 
 @media (max-width: 400px) {
     .container {
-        transform: scale(0.8) translateY(50px);
+        transform: scale(0.8) translateY(0px);
     }
 
     .container.open {
-        transform: scale(0.8) translateY(120px);
+        transform: scale(0.8) translateY(60px);
     }
 
     .instruction {
@@ -286,11 +283,11 @@ body {
 
 @media (max-width: 340px) {
     .container {
-        transform: scale(0.7) translateY(50px);
+        transform: scale(0.7) translateY(0px);
     }
 
     .container.open {
-        transform: scale(0.7) translateY(140px);
+        transform: scale(0.7) translateY(60px);
     }
 }
 
